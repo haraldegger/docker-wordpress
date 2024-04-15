@@ -1,0 +1,1 @@
+This folder contains all temporary files and is cleared on each restart.

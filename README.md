@@ -1,14 +1,14 @@
 Introduction
 ============
 
-docker-wordpress is a pure docker container providing wordpress hosting.
-The goal of this project is to provide you a simple standalone solution for a specific problem: wordpress in a nutshell.
+docker-php is a pure docker container providing the functionality of a php web server.
+The goal of this project is to provide you a simple standalone solution for a specific problem: PHP in a nutshell.
 This project does not use advanced techniques like Kubernetes or Docker Compose to provide you its functionalities.\
 It is very much comparable to a virtual private server (VPS), but instead of running on a virtual machine (VM) it is running in a docker container.
 
 Why should I use it?
 ============
-There are already so many docker containers available, which offer similar functionalities and there exist even more providers which offer wordpress hosting as a service.\
+There are already so many docker containers available, which offer similar functionalities and there exist even more providers which offer PHP as a service.\
 But: **Don't give away your freedom of such critical infrastructure!**\
 This might be the backbone of your online presence, **so don't make you depend on anyone!**\
 - It is very simple, therefore easy to use and to maintain
@@ -22,7 +22,7 @@ This service will be most likely facing the internet 24h a day.\
 This is very useful in providing service to your users, but it also opens a big attack vector for every bad criminal out there which wants to take you down!\
 Therefore security is of highest importance for this project, and we try to keeping you save by the following standards:
 - The docker image is based on [Debian], a very robust and reliable operating system. It is very conservative in updating packages to guarantee security and stability over (newer) functionality
-- We expose as little as possible to the internet, in this project basically only the https port (443) and not the unsecure http port (80) and optionally the sftp port (22) for file transfer (ssh login is blocked). The later has only to be opened whenever you want to update your website. Additionally we expose also the database port (3306) to allow you to interact with your database, please enable this only when you have the specific need to access the database, otherwise never expose it.
+- We expose as little as possible to the internet, in this project basically only the https port (443) and not the unsecure http port (80) and optionally the sftp port (22) for file transfer (ssh login is blocked). The later has only to be opened whenever you want to update your website.
 - We provide you with an easy update strategy, you basically recreate the docker container with the newest image and all your configuration and data is preserved. Since everything is already prepared beforehand the update process is basically instant.
 - If you find any issue with our security concept which we might have missed or nor understood in some way, please let us know imediately so that we can fix it asap
 
@@ -32,14 +32,14 @@ This service is thought to be working hand in hand with a reverse proxy server, 
 All scripts and data and everything is saved in the /srv/ folder. If you want to backup or restore your data, everything you need to care about is in the /srv/data/ folder.\
 \
 **Use the following script to create the docker container:**\
-docker run --name *NAME* --restart=always -p *HTTPSPORT*:443 -p *SFTPPORT*:22 -e MY_USERNAME="*USERNAME*" -e MY_PASSWORD="*PASSWORD*" -e MY_PACKAGES="*PACKAGES*" haraldegger/docker-wordpress\
+docker run --name *NAME* --restart=always -p *HTTPSPORT*:443 -p *SFTPPORT*:22 -e MY_USERNAME="*USERNAME*" -e MY_PASSWORD="*PASSWORD*" -e MY_PACKAGES="*PACKAGES*" haraldegger/docker-php\
 - *NAME*: Name of the instance, we suggest to use the name of the domain, f.ex. github.com
 - *HTTPSPORT*: Port through which your webserver is reached with the https protocoll, f.ex. 10443
 - *SFTPPORT*: Port through which you can connect via SFTP, you need to provide this port only when you want to access your files, f.ex. 10022
 - *USERNAME*: Username for the SFTP connection, we recommend to not use an easy to guess user, f.ex. jamesbond006
 - *PASSWORD*: Password for the SFTP connection, we commend a very secure password, f.ex. 5RL8~BaJCjw}bW48LL7,wM;P4b7z[7)D,bWctj$0g-y.qN>K,<
 - *PACKAGES*: You can specify additional packages, which you want to have installed and we did not forsee, most of the time you will not need this, f.ex. php8.2-sqlite3
-- Summarizing the above you will get the following command: *docker run --name github.com --restart=always -p 10443:443 -p 10022:22 -e MY_USERNAME="jamesbond006" -e MY_PASSWORD="5RL8~BaJCjw}bW48LL7,wM;P4b7z[7)D,bWctj$0g-y.qN>K,<" -e MY_PACKAGES="php8.2-sqlite3" haraldegger/docker-wordpress\*
+- Summarizing the above you will get the following command: *docker run --name github.com --restart=always -p 10443:443 -p 10022:22 -e MY_USERNAME="jamesbond006" -e MY_PASSWORD="5RL8~BaJCjw}bW48LL7,wM;P4b7z[7)D,bWctj$0g-y.qN>K,<" -e MY_PACKAGES="php8.2-sqlite3" haraldegger/docker-php\*
 **Internal data structure**
 As mentioned before, everyhing we need we can find in the /srv/ directory:\
 - You are only able to access this folder from SFTP.

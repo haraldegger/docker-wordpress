@@ -1,0 +1,1 @@
+This is the log file, we try to log everything onto the docker console, but secondary logs are written here.

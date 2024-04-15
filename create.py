@@ -1,5 +1,6 @@
 import os
 import gzip
+import datetime
 
 def Dockerize(repository, project):
     #preparing paths to output (tar and tgz) and input (srv)
@@ -52,6 +53,16 @@ def Dockerize(repository, project):
     print("Use the following commands to launch the newly create docker image")
     print("docker load --input \"" + tgzPath + "\"")
     print("docker run --name putyournamehere --restart=always -p 1000:443 -p 1001:22 -e MY_USERNAME=\"username\" -e MY_PASSWORD=\"password\" -e MY_PACKAGES=\"php8.2-sqlite3\" " + repository + "/" + project)
+    
+    #and a reminder how to upload to docker hub
+    print("=== Upload to docker hub ===")
+    version = datetime.date.today().strftime("%Y-%m-%d")
+    print("Use the following commands to upload the newly create docker image to docker hub")
+    print("docker load --input \"" + tgzPath + "\"")
+    print("docker image tag " + repository + "/" + project + ":latest " + repository + "/" + project + ":" + version)
+    print("docker push " + repository + "/" + project + ":" + version)
+    print("docker push " + repository + "/" + project + ":latest")
+
 
 if __name__ == "__main__":
     Dockerize('haraldegger', 'docker-wordpress')

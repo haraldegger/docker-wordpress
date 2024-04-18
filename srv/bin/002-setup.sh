@@ -32,6 +32,26 @@ usermod -d /srv/ $MY_USERNAME
 echo "Setting up folder rights..."
 chmod -R 775 /srv/*
 chmod 755 /srv/
+chown -R mysql:mysql /srv/data/db
+chmod -R 750 /srv/data/db
+#-------------------------------------------------------------------------#
+echo "Setup database..."
+if [ ! -d "/srv/data/db/mysql" ]; then
+    cp -R /var/lib/mysql/* /srv/data/db/
+    chown -R mysql:mysql /srv/data/db
+    chmod -R 750 /srv/data/db
+    #adding our config files
+    echo '!includedir /srv/cfg/' >> /etc/mysql/mariadb.cnf
+    echo '!includedir /srv/data/cfg/' >> /etc/mysql/mariadb.cnf
+    #launching db
+    /etc/init.d/mariadb start
+    #creating db and user
+    mysql -e "CREATE DATABASE wordpress"
+    mysql -e 'GRANT ALL PRIVILEGES ON wordpress.* TO $MY_USERNAME@localhost IDENTIFIED BY "$MY_PASSWORD!"'
+else
+    echo '!includedir /srv/cfg/' >> /etc/mysql/mariadb.cnf
+    echo '!includedir /srv/data/cfg/' >> /etc/mysql/mariadb.cnf
+fi
 #-------------------------------------------------------------------------#
 echo "Setting up SFTP for file transfer..."
 mkdir /run/sshd

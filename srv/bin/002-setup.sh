@@ -34,9 +34,22 @@ chmod -R 775 /srv/*
 chmod 755 /srv/
 chown -R mysql:mysql /srv/data/db
 chmod -R 750 /srv/data/db
+chown www-data:www-data -R /srv/data/www/
+find /srv/data/www/ -type d -exec chmod 755 {} \;
+find /srv/data/www/ -type f -exec chmod 644 {} \;
+chmod 777 /srv/data/www
 #-------------------------------------------------------------------------#
 echo "Setup database..."
 if [ ! -d "/srv/data/db/mysql" ]; then
+    if [ -z ${DB_USERNAME+x} ]; then
+        export DB_USERNAME=$MY_USERNAME
+    fi
+    if [ -z ${DB_PASSWORD+x} ]; then
+        export DB_PASSWORD=$MY_PASSWORD
+    fi
+    if [ -z ${DB_NAME+x} ]; then
+        export DB_NAME=wordpress
+    fi
     cp -R /var/lib/mysql/* /srv/data/db/
     chown -R mysql:mysql /srv/data/db
     chmod -R 750 /srv/data/db
@@ -46,12 +59,19 @@ if [ ! -d "/srv/data/db/mysql" ]; then
     #launching db
     /etc/init.d/mariadb start
     #creating db and user
-    mysql -e "CREATE DATABASE wordpress"
-    mysql -e 'GRANT ALL PRIVILEGES ON wordpress.* TO $MY_USERNAME@localhost IDENTIFIED BY "$MY_PASSWORD!"'
+    mysql -e "CREATE DATABASE $DB_NAME"
+    mysql -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO $DB_USERNAME@localhost IDENTIFIED BY '$DB_PASSWORD'"
 else
     echo '!includedir /srv/cfg/' >> /etc/mysql/mariadb.cnf
     echo '!includedir /srv/data/cfg/' >> /etc/mysql/mariadb.cnf
 fi
+#-------------------------------------------------------------------------#
+echo "Setting up php fpm..."
+echo "[global]" > /etc/php/8.2/fpm/php-fpm.conf
+echo "pid = /run/php/php8.2-fpm.pid" >> /etc/php/8.2/fpm/php-fpm.conf
+echo "error_log = /srv/data/log/php-fpm.log" >> /etc/php/8.2/fpm/php-fpm.conf
+echo "include=/srv/cfg/php-fpm.conf" >> /etc/php/8.2/fpm/php-fpm.conf
+echo "include=/srv/data/cfg/php-fpm.conf" >> /etc/php/8.2/fpm/php-fpm.conf
 #-------------------------------------------------------------------------#
 echo "Setting up SFTP for file transfer..."
 mkdir /run/sshd

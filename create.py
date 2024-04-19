@@ -19,7 +19,7 @@ def Dockerize(repository, project):
 
     #on first start we simply copy the whole content of our local srv folder to the docker /srv folder
     print("=== Starting docker and copying files... ===")
-    os.system("docker run --name " + project + "_container -v \"" + srvPath + "\":/tmp/srv/ debian:latest cp -R /tmp/srv /")
+    os.system("docker run --name " + project + "_container -v \"" + srvPath + "\":/tmp/srv/ debian:stable-slim cp -R /tmp/srv /")
     os.system("docker commit " + project + "_container " + repository + "/" + project)
     #on second run we start the container with the /srv/bin/start.sh script, which will install all packages 
     print("=== Starting docker and install it... ===")

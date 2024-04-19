@@ -30,4 +30,5 @@ cd /srv/tmp/
 wget https://wordpress.org/wordpress-6.5.2.tar.gz
 tar -xvzf wordpress-6.5.2.tar.gz
 mv wordpress/* /srv/data/www/
+rm wordpress-6.5.2.tar.gz
 #-------------------------------------------------------------------------#

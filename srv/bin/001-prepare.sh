@@ -8,6 +8,15 @@ apt-get -y install nginx
 apt-get -y install mariadb-server
 apt-get -y install php8.2-fpm
 apt-get -y install php8.2-mysql
+apt-get -y install php8.2-gd
+apt-get -y install php8.2-xml
+apt-get -y install php8.2-zip
+apt-get -y install php8.2-imagick
+apt-get -y install php8.2-mbstring
+apt-get -y install php8.2-curl
+apt-get -y install php8.2-bcmath
+apt-get -y install php8.2-opcache
+apt-get -y install php-json
 apt-get -y install openssl
 apt-get -y install openssh-server
 apt-get -y install cron

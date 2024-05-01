@@ -20,7 +20,7 @@ if [ -f "/srv/data/cfg/php.ini" ]; then
 else
     export PHPRC=/srv/cfg/
 fi
-./etc/init.d/php8.2-fpm start
+/srv/bin/php-fpm start
 #-------------------------------------------------------------------------#
 echo "Starting database..."
 /etc/init.d/mariadb start

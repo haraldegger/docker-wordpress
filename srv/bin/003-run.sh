@@ -25,10 +25,22 @@ fi
 echo "Starting database..."
 /etc/init.d/mariadb start
 #-------------------------------------------------------------------------#
-echo "Starting nginx..."
-if [ -f "/srv/data/cfg/nginx.cfg" ]; then
-    nginx -c /srv/data/cfg/nginx.cfg -g "daemon off;"
+if [ -z ${USE_APACHE+x} ]; then
+    echo "Starting nginx..."
+    if [ -f "/srv/data/cfg/nginx.cfg" ]; then
+        nginx -c /srv/data/cfg/nginx.cfg -g "daemon off;"
+    else
+        nginx -c /srv/cfg/nginx.cfg -g "daemon off;"
+    fi
 else
-    nginx -c /srv/cfg/nginx.cfg -g "daemon off;"
+    echo "Starting apache2..."
+    mkdir -p /var/run/apache2
+    export APACHE_RUN_DIR=/var/run/apache2
+    export APACHE_LOCK_DIR=/var/lock/apache2
+    if [ -f "/srv/data/cfg/apache2.conf" ]; then
+        apache2 -f /srv/data/cfg/apache2.conf -D FOREGROUND
+    else
+        apache2 -f /srv/cfg/apache2.conf -D FOREGROUND
+    fi
 fi
 #-------------------------------------------------------------------------#

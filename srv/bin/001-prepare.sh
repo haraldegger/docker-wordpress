@@ -5,6 +5,7 @@ export DEBIAN_FRONTEND="noninteractive"
 apt-get -y update
 apt-get -y upgrade
 apt-get -y install nginx
+apt-get -y install apache2
 apt-get -y install mariadb-server
 apt-get -y install php8.2-fpm
 apt-get -y install php8.2-mysql
